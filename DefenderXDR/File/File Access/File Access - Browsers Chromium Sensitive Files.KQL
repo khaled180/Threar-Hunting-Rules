@@ -1,13 +1,19 @@
 DeviceFileEvents
-| where FileName contains @"\User Data\Default\Cookies"
-    or FileName contains @"\User Data\Default\History"
-    or FileName contains @"\User Data\Default\Network\Cookies"
-    or FileName contains @"\User Data\Default\Web Data"
-| where not (InitiatingProcessFileName startswith @"C:\Program Files (x86)\"
-    or InitiatingProcessFileName startswith @"C:\Program Files\"
-    or InitiatingProcessFileName startswith @"C:\Windows\system32\"
-    or InitiatingProcessFileName startswith @"C:\Windows\SysWOW64\"
-    or InitiatingProcessFileName startswith @"C:\ProgramData\Microsoft\Windows Defender\"
-    or InitiatingProcessFileName endswith @"\MpCopyAccelerator.exe"
-    or InitiatingProcessFileName endswith @"\MsMpEng.exe")
-| project Timestamp, DeviceName, FileName, InitiatingProcessFileName, InitiatingProcessCommandLine
+| where FolderPath  has_any (
+    "\\User Data\\Default\\Cookies",
+    "\\User Data\\Default\\History",
+    "\\User Data\\Default\\Network\\Cookies",
+    "\\User Data\\Default\\Web Data"
+)
+| where InitiatingProcessFileName != "System"
+| where not (
+    InitiatingProcessFolderPath startswith "C:\\Program Files (x86)\\"
+    or InitiatingProcessFolderPath startswith "C:\\Program Files\\"
+    or InitiatingProcessFolderPath startswith "C:\\Windows\\system32\\"
+    or InitiatingProcessFolderPath startswith "C:\\Windows\\SysWOW64\\"
+)
+| where not (
+    InitiatingProcessFolderPath startswith "C:\\ProgramData\\Microsoft\\Windows Defender\\"
+    and (InitiatingProcessFileName endswith "MpCopyAccelerator.exe" or InitiatingProcessFileName endswith "MsMpEng.exe")
+)
+| project Timestamp, InitiatingProcessFolderPath, FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine
