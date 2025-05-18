@@ -1,0 +1,10 @@
+DeviceFileEvents
+| where FolderPath has @"\sysvol\" and FolderPath has @"\Policies\"
+| where FolderPath startswith @"\\"
+| where not (
+    InitiatingProcessFolderPath startswith @"C:\Program Files" or
+    InitiatingProcessFolderPath startswith @"C:\Program Files (x86)" or
+    InitiatingProcessFolderPath startswith @"C:\Windows\system32" or
+    InitiatingProcessFolderPath startswith @"C:\Windows\SysWOW64" or
+    InitiatingProcessFileName == "explorer.exe"
+)
