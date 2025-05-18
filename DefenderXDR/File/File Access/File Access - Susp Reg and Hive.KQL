@@ -1,0 +1,8 @@
+DeviceFileEvents
+| where FileName endswith ".hive" or FileName endswith ".reg"
+| where not (
+    InitiatingProcessFolderPath startswith @"C:\Program Files" or
+    InitiatingProcessFolderPath startswith @"C:\Program Files (x86)" or
+    InitiatingProcessFolderPath startswith @"C:\Windows\System32" or
+    InitiatingProcessFolderPath startswith @"C:\Windows\SysWOW64"
+)
