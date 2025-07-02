@@ -1,4 +1,0 @@
-DeviceFileEvents
-| where ActionType == "FileDeleted"
-| where FileName endswith ":Zone.Identifier"
-| project Timestamp, DeviceName, InitiatingProcessFileName, InitiatingProcessCommandLine, FileName, FolderPath, ReportId
