@@ -1,0 +1,3 @@
+DeviceFileEvents
+| where FileName endswith @"\Panther\unattend.xml"
+| project Timestamp, DeviceName, InitiatingProcessFileName, InitiatingProcessCommandLine, FileName, FolderPath, ReportId
